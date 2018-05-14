@@ -345,12 +345,8 @@ def _convert_concat(insym, keras_layer, _):
 
 
 def _convert_reshape(insym, keras_layer, _):
-    shape = keras_layer.shape if hasattr(keras_layer, 'shape') \
-       else keras_layer.target_shape if hasattr(keras_layer, 'target_shape') \
-       else None
-    if shape is None:
-        raise TypeError("No shape attribute in reshape layer: {}".format(keras_layer))
-    return _sym.reshape(insym, shape=shape)
+    batch_shape = (-1,) + keras_layer.target_shape
+    return _sym.reshape(insym, shape=batch_shape)
 
 
 def _default_skip(insym, keras_layer, _): # pylint: disable=unused-argument
